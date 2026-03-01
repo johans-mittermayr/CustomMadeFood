@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -51,9 +52,7 @@ export default function CustomerOrdersPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-brand-red to-brand-orange">
-                <span className="text-sm font-bold text-white">CM</span>
-              </div>
+              <Image src="/logoCMF.png" alt="CMF" width={36} height={36} className="rounded-lg" />
               <span className="text-xl font-bold text-gray-900">
                 CustomMadeFood
               </span>

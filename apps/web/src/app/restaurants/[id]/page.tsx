@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,6 +23,7 @@ interface Ingredient {
   id: string;
   name: string;
   category: string | null;
+  imageUrl: string | null;
   pricePerGram: string;
   minGrams: number;
   maxGrams: number;
@@ -148,7 +150,7 @@ export default function RestaurantDetailPage() {
   // Group by category
   const categories: Record<string, Ingredient[]> = {};
   restaurant.ingredients.forEach((i) => {
-    const cat = i.category || "Other";
+    const cat = i.category || "Outros";
     if (!categories[cat]) categories[cat] = [];
     categories[cat].push(i);
   });
@@ -159,9 +161,7 @@ export default function RestaurantDetailPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/restaurants" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-brand-red to-brand-orange">
-                <span className="text-sm font-bold text-white">CM</span>
-              </div>
+              <Image src="/logoCMF.png" alt="CMF" width={36} height={36} className="rounded-lg" />
               <span className="text-xl font-bold text-gray-900">
                 CustomMadeFood
               </span>
@@ -194,12 +194,28 @@ export default function RestaurantDetailPage() {
                     return (
                       <Card
                         key={ingredient.id}
-                        className={
+                        className={`overflow-hidden ${
                           isSelected
                             ? "ring-2 ring-brand-red/30 border-brand-red/20"
                             : ""
-                        }
+                        }`}
                       >
+                        {ingredient.imageUrl && (
+                          <div className="relative h-32 w-full">
+                            <img
+                              src={ingredient.imageUrl}
+                              alt={ingredient.name}
+                              className="w-full h-full object-cover"
+                            />
+                            {isSelected && (
+                              <div className="absolute top-2 right-2">
+                                <Badge className="bg-brand-red text-white shadow-lg">
+                                  {grams}g
+                                </Badge>
+                              </div>
+                            )}
+                          </div>
+                        )}
                         <CardContent className="p-4">
                           <div className="flex justify-between items-start mb-3">
                             <div>
@@ -210,7 +226,7 @@ export default function RestaurantDetailPage() {
                                   R${(Number(ingredient.pricePerGram) * 100).toFixed(2)}/100g
                               </p>
                             </div>
-                            {isSelected && (
+                            {isSelected && !ingredient.imageUrl && (
                               <Badge className="bg-brand-red-light text-brand-red">
                                 {grams}g
                               </Badge>

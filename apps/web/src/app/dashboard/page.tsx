@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { orders, ingredients } from "@custom-made-food/db";
@@ -59,9 +60,15 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">
-        Painel do Restaurante
-      </h1>
+      <div className="flex items-center gap-4 mb-8">
+        <Image src="/logoCMF.png" alt="CMF" width={48} height={48} />
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Painel do Restaurante
+          </h1>
+          <p className="text-sm text-gray-500">Gerencie seus pedidos e ingredientes</p>
+        </div>
+      </div>
       <div className="grid md:grid-cols-4 gap-6">
         {stats.map((stat) => (
           <Card key={stat.label}>

@@ -40,7 +40,25 @@ export default function LoginPage() {
       setError("Email ou senha inválidos");
       setLoading(false);
     } else {
-      router.push(callbackUrl);
+      // If there's an explicit callback, use it; otherwise route by role
+      if (callbackUrl !== "/") {
+        router.push(callbackUrl);
+      } else {
+        // Fetch session to determine role
+        const res = await fetch("/api/auth/session");
+        const session = await res.json();
+        const role = session?.user?.role;
+
+        if (role === "admin") {
+          router.push("/admin");
+        } else if (role === "restaurant_owner" || role === "kitchen_staff") {
+          router.push("/dashboard");
+        } else if (role === "customer") {
+          router.push("/restaurants");
+        } else {
+          router.push("/");
+        }
+      }
       router.refresh();
     }
   }
